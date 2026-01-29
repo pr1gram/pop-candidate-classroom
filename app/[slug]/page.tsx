@@ -33,7 +33,7 @@ function AnimatedNumber({ value }: { value: number }) {
     }
 
     requestAnimationFrame(tick);
-  }, [value]);
+  }, [value, display]);
 
   return <>{display.toLocaleString()}</>;
 }
@@ -60,6 +60,13 @@ export default function ClickPage() {
   const [topScore, setTopScore] = useState(0);
   const [bottomScore, setBottomScore] = useState(0);
 
+  /* press state (TEXT ONLY) */
+  const [pressed, setPressed] = useState<"top" | "bottom" | null>(null);
+
+  /* anti-jitter refs */
+  const lastTop = useRef(0);
+  const lastBottom = useRef(0);
+
   /* =========================
      SEND TO API
   ========================= */
@@ -79,14 +86,14 @@ export default function ClickPage() {
       bufferTop++;
       setTopScore((s) => {
         const next = s + 1;
-        lastTop.current = next; // 🔴 IMPORTANT
+        lastTop.current = next;
         return next;
       });
     } else {
       bufferBottom++;
       setBottomScore((s) => {
         const next = s + 1;
-        lastBottom.current = next; // 🔵 IMPORTANT
+        lastBottom.current = next;
         return next;
       });
     }
@@ -104,11 +111,8 @@ export default function ClickPage() {
   }
 
   /* =========================
-     LIVE SYNC (ANTI-JITTER)
+     LIVE SYNC (EVERY 2s)
   ========================= */
-  const lastTop = useRef(0);
-  const lastBottom = useRef(0);
-
   useEffect(() => {
     const fetchLive = async () => {
       const res = await fetch("/api/live", { cache: "no-store" });
@@ -141,24 +145,54 @@ export default function ClickPage() {
       {/* TOP */}
       <div
         className={`flex-1 flex items-center justify-center ${topColor}`}
-        onPointerDown={() => pop("top")}
+        onPointerDown={() => {
+          setPressed("top");
+          pop("top");
+        }}
+        onPointerUp={() => setPressed(null)}
+        onPointerLeave={() => setPressed(null)}
+        onPointerCancel={() => setPressed(null)}
       >
-        <span className={`text-7xl ${topText}`}>
+        <span
+          className={`
+            text-7xl ${topText}
+            transition-transform duration-150 ease-out
+            ${pressed === "top" ? "scale-90" : "scale-100"}
+          `}
+        >
           <AnimatedNumber value={topScore} />
         </span>
       </div>
 
       {/* VS */}
-      
-        <Image src="/vs.png" alt="VS" width={150} height={150} className="object-contain absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10" />
-
+      <Image
+        src="/vs.png"
+        alt="VS"
+        width={150}
+        height={150}
+        className="object-contain absolute left-1/2 top-1/2 
+                   -translate-x-1/2 -translate-y-1/2 
+                   pointer-events-none z-10"
+      />
 
       {/* BOTTOM */}
       <div
         className={`flex-1 flex items-center justify-center ${bottomColor}`}
-        onPointerDown={() => pop("bottom")}
+        onPointerDown={() => {
+          setPressed("bottom");
+          pop("bottom");
+        }}
+        onPointerUp={() => setPressed(null)}
+        onPointerLeave={() => setPressed(null)}
+        onPointerCancel={() => setPressed(null)}
       >
-        <span className={`text-7xl ${bottomText} transition-transform`}>
+        <span
+          className={`
+            text-7xl ${bottomText}
+            transition-transform duration-150 ease-out
+            ${pressed === "bottom" ? "scale-90" : "scale-100"}
+          `}
+        >
           <AnimatedNumber value={bottomScore} />
         </span>
       </div>

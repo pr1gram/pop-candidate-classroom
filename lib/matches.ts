@@ -1,11 +1,11 @@
 export const MATCHES = {
   ylwble: {
-    top: "Yellow1",
-    bottom: "Blue1",
-    topColor: "bg-[#FCD10C]",
-    bottomColor: "bg-[#3AADE1]",
-    topText: "text-[#087E38]",
-    bottomText: "text-[#35548B]",
+    top: "Blue1",
+    bottom: "Yellow1",
+    topColor: "bg-[#3AADE1]",
+    bottomColor: "bg-[#FCD10C]",
+    topText: "text-[#35548B]",
+    bottomText: "text-[#087E38]",
   },
   rdorge: {
     top: "Red1",
