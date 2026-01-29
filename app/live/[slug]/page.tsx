@@ -33,22 +33,23 @@ export default function LivePage() {
   /* =========================
      TIMER STATE
   ========================= */
-  const START_TIME = 6 * 60 // 6 minutes
+  const START_TIME = 6 * 60
   const [timeLeft, setTimeLeft] = useState(START_TIME)
   const [started, setStarted] = useState(false)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
   /* =========================
-     URL FOR QR
+     QR URL (CLICK PAGE)
   ========================= */
-  const [currentUrl, setCurrentUrl] = useState("")
+  const [clickUrl, setClickUrl] = useState("")
 
   useEffect(() => {
-    setCurrentUrl(window.location.href)
-  }, [])
+    if (!slug) return
+    setClickUrl(`${window.location.origin}/${slug}`)
+  }, [slug])
 
   /* =========================
-     TIMER LOGIC (CLICK TO START)
+     TIMER LOGIC
   ========================= */
   useEffect(() => {
     if (!started) return
@@ -89,9 +90,6 @@ export default function LivePage() {
     return () => clearInterval(poll)
   }, [top, bottom])
 
-  /* =========================
-     HELPERS
-  ========================= */
   const formatTime = (s: number) =>
     `${Math.floor(s / 60).toString().padStart(2, "0")}:${(s % 60)
       .toString()
@@ -109,11 +107,9 @@ export default function LivePage() {
 
         {/* CENTER */}
         <div className="flex flex-col items-center justify-center gap-6 z-10">
-          
-          {/* TIMER (CLICKABLE) */}
           <button
             onClick={() => !started && setStarted(true)}
-            className={`text-8xl font-bold font-Adirek transition ${
+            className={`text-8xl font-bold transition ${
               timeLeft === 0
                 ? "text-red-500"
                 : started
@@ -124,13 +120,14 @@ export default function LivePage() {
             {formatTime(timeLeft)}
           </button>
 
-          {/* QR */}
+          {/* QR → CLICK PAGE */}
           <div className="bg-white p-3 rounded-xl shadow h-36 w-36">
-            {currentUrl && (
+            {clickUrl && (
               <QRCode
                 size={256}
                 style={{ width: "100%", height: "auto" }}
-                value={currentUrl}
+                value={clickUrl}
+                fgColor="#565656"
               />
             )}
           </div>
@@ -158,7 +155,7 @@ function ScoreColumn({
 
   return (
     <div className="relative flex flex-col items-center h-full w-60 bg-[#D8D6D6] rounded-xl overflow-hidden shadow-inner">
-      <div className="z-10 mt-8 text-5xl font-semibold text-white font-Adirek drop-shadow">
+      <div className="z-10 mt-8 text-5xl font-semibold text-white drop-shadow">
         <AnimatedText value={score} />
       </div>
 
