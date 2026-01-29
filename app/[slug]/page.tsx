@@ -99,7 +99,7 @@ export default function ClickPage() {
         bufferTop = 0;
         bufferBottom = 0;
         timer = null;
-      }, 250);
+      }, 3000);
     }
   }
 
@@ -129,7 +129,7 @@ export default function ClickPage() {
     };
 
     fetchLive();
-    const i = setInterval(fetchLive, 500);
+    const i = setInterval(fetchLive, 2000);
     return () => clearInterval(i);
   }, [top, bottom]);
 
@@ -137,7 +137,7 @@ export default function ClickPage() {
      UI
   ========================= */
   return (
-    <div className="relative h-screen w-screen flex flex-col font-bold select-none">
+    <div className="relative h-screen w-screen flex flex-col font-semibold font-Adirek select-none">
       {/* TOP */}
       <div
         className={`flex-1 flex items-center justify-center ${topColor}`}

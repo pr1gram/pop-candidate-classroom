@@ -5,7 +5,25 @@
   --foreground: #171717;
 }
 
+@font-face {
+  font-family: Adirek;
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/Adirek-Slab-Lite-Bold-Italic.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: Adirek;
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/Adirek-Slab-Lite-SemiBold.ttf") format("truetype");
+}
+
+
 @theme inline {
+  --font-Adirek: "Adirek", serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
