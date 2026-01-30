@@ -12,6 +12,10 @@ let bufferTop = 0;
 let bufferBottom = 0;
 let timer: any = null;
 
+const CLICK_LIMIT = 15;
+const CLICK_WINDOW = 1000; // ms
+let clickTimestamps: number[] = [];
+
 /* =========================
    ANIMATED NUMBER
 ========================= */
@@ -82,6 +86,19 @@ export default function ClickPage() {
      CLICK HANDLER (OPTIMISTIC)
   ========================= */
   function pop(side: "top" | "bottom") {
+    const now = Date.now();
+
+    // keep only clicks in the last 1 second
+    clickTimestamps = clickTimestamps.filter((t) => now - t < CLICK_WINDOW);
+
+    // rate limit
+    if (clickTimestamps.length >= CLICK_LIMIT) {
+      return; // 🚫 ignore click
+    }
+
+    clickTimestamps.push(now);
+
+    // ===== existing logic =====
     if (side === "top") {
       bufferTop++;
       setTopScore((s) => {
