@@ -150,7 +150,7 @@ export default function ClickPage() {
     };
 
     fetchLive();
-    const i = setInterval(fetchLive, 3000);
+    const i = setInterval(fetchLive, 5000);
     return () => clearInterval(i);
   }, [top, bottom]);
 
