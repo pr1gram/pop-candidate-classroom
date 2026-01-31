@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { dbAdmin, FieldValue } from "@/lib/firebase-admin"
 
-const SHARD_COUNT = 100
+const SHARD_COUNT = 20
 
 // ===== CONFIG =====
 const MAX_AMOUNT = 15          // max clicks per request
